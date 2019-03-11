@@ -1,0 +1,22 @@
+language: java
+jdk: oraclejdk8
+env:
+  global:
+    - secure: hDkJM3J1kpt4MNmyN3ldTZ1hHOR1ohLO66u+B4izTXzuQRL8NJJFwQh9DN1AM7da0pdARPi2miTx3VkGU/xPmpozx5HomSVe2B1mtp0OoTfASoaOYyuN1qw2cMCfL80jyn/qYFw5XrlRQzUIy4gRJe5uzAx5aJUXJ6fmJLWcmj+PuqgEptoQmMRJZLxH1/I3fbr+i7wYmxsepEXWvUsFNbDAyGKsd93t6dODs7LmlsRj1o3xAHUkO/C/c7gDkGdimH8YwIKh5wnaPvQPdF5gMiUycaBvCxJiT52m3o+0X9+7iZEylGdBQbSTIYWrogo0AQKqBUcJalJguP5QDmaiVoXuQSRR/8AyoPtx0uEcvnJoJ0FkToBWLlBSeSClbBhihD9CAgviK7gO7BCM8O2GKWNdiK/Q07TpGw4wlVR7AmEY7mX9HlPU2mBSGZj1S4Zbil2MdWXejut9iI2E+e38mYsO3+H1pyvIKJhuRF+uRkHWRNDZYErcW14VoeOjk/ZSNH632O2KhekkEpoPkYbCR5jNKHkFxMyMPz7UWzYC3RontCv74yi11BZxoB19fNPyCjlBOfAiBit/k/BLV/XJE8YcIcZKSEFFqefR24K5P8VcFoBTZxPGR0hTYGbLQ0tno3J3T1BLZHOtSHPGKq6F1w3BHwHj/oGSd2dRgUSSPMo=
+    - COMMIT=${TRAVIS_COMMIT::7}
+addons:
+  sonarcloud:
+    organization: ekingdom-dev
+    token:
+      secure: "$SONAR_TOKEN"
+sudo: required
+script:
+  - "./gradlew test"
+  - "./gradlew :backend:sonarqube"
+deploy:
+  provider: heroku
+  api_key:
+    secure: r7VvQVuQzSv2u5/YqeqWEqI15TCD9mKNl3MbdsbkAilMzao18SoaiqRVxG/ob9pIP2WbN+DWsBZz5MUrvGaiVvsa5SK/pMIrFTwic792sFCd7mUyub6XovG7YbfjPee6sqf7fqvDbZblaRlW01Vl3eZ9/nQ+SjYVnG2KdBNI8e+HtQusJZ9ZExDfiSyr7+btp8CNu1envclwnx4tvJi1be686StYDbDr8welqaWyGN8m6oJtCBJUZ2VGOxBEIPiYxD29484l4mS6zEKrksmJQfu2S81v64KuCWI4Gyj8lSguUCJtI5tuiavbOYaE7OZS1zId9SByHbNrv0iRQnJVyPPcMpcRsI2NlL4yod4JEfqUjxIo+izz0k1ihUu4HjnopAEJY7glGzxUtth2JMPoKEUk5NJ0/aJ1xpbIAZgich327OJhHy+kO3MYqTaYIuM135R6Ew3d0nEB4OrNUSutaIyhIm+0IzoTaGyVx3J+6sSVe08u91ZL+1WOJzg66KrKw74euZFdvDZ+uExyxHzKHvSVKt5lpJFZ+e+sCWK9yB0eNvGplbwH5CQcqtk80WsibETk/v28bdOu7KGsAX7J68JyTC+VIOPoidKjbuA3xzPqNGPfgqmLjvxv4wwRkwirdIKURkJ0k/9FKQuUK838wF3OqVojTuXqSq3kJ26E14w=
+  app: ekingdom-dev
+  on:
+    repo: ekingdom-dev/ekingdom
