@@ -51,7 +51,7 @@ nbdist/
 **/e2e/*.js
 **/e2e/*.map
 **/static
-
+**/.scannerwork
 
 ### backend ###
 **/out

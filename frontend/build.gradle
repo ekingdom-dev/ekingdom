@@ -16,3 +16,7 @@ jar.dependsOn 'npm_run_build'
 jar {
   from 'dist/frontend' into 'static'
 }
+
+task sonarqube(type: Exec) {
+  commandLine  "sonar-scanner", "-X", "-Dsonar.projectVersion=1.0.0"
+}
