@@ -1,0 +1,24 @@
+.navigation {
+  position: absolute;
+  top: 50px;
+  left: 5px;
+}
+
+canvas {
+  background-color: red;
+}
+
+.village-dialogtip-hidden {
+  display: none;
+}
+
+.village-dialogtip {
+  height: 150px;
+  width: 150px;
+  border-radius: 5px;
+  background-color: #ffe5ba;
+  display: block;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+}

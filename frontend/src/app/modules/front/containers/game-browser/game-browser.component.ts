@@ -7,23 +7,28 @@ import { mapObjectsSeed } from './game-browser-map-seed';
   styleUrls: ['./game-browser.component.scss']
 })
 export class GameBrowserComponent implements OnInit, AfterViewInit {
-  ctx = null;
-  gameMap = mapObjectsSeed;
-  tileW = 50;
-  tileH = 50;
-  mapW = 200;
-  mapH = 200;
-  viewportX = 5;
-  viewportY = 5;
-  currentSecond = 0;
-  frameCount = 0;
-  framesLastSecond = 0;
   activeDragging = false;
-  navigationStep = 0.4;
-  minimalDistanceFromBorder = 0.001;
-  navigationMultiplier = 1;
+  ctx = null;
+  currentSecond = 0;
   currentX = 0.0;
   currentY = 0.0;
+  lastClickX = 0;
+  lastClickY = 0;
+  lastClickObjectX = 0;
+  lastClickObjectY = 0;
+  displayVillageDialogTip = false;
+  frameCount = 0;
+  framesLastSecond = 0;
+  gameMap = mapObjectsSeed;
+  mapH = 200;
+  mapW = 200;
+  minimalDistanceFromBorder = 0.001;
+  navigationMultiplier = 1;
+  navigationStep = 0.4;
+  tileH = 50;
+  tileW = 50;
+  viewportX = 5;
+  viewportY = 5;
 
   tiles: HTMLImageElement[] = [];
 
@@ -95,22 +100,23 @@ export class GameBrowserComponent implements OnInit, AfterViewInit {
               break;
           }
           this.ctx.drawImage(image, (x - (this.currentX % 1)) * this.tileW, (y - (this.currentY % 1)) * this.tileH, this.tileW, this.tileH);
-          if (y == 0) {
-            this.ctx.fillText(Math.floor(this.currentX + x), ((x - (this.currentX % 1)) * this.tileW) + 20, 10);
+          if (y === 1) {
+            this.ctx.fillText(String(Math.floor(this.currentX + x)), ((x - (this.currentX % 1)) * this.tileW) + 20, 10);
           }
-          if (x == 0) {
-            this.ctx.fillText(Math.floor(this.currentY + y), 0, ((y - (this.currentY % 1)) * this.tileH) + 30);
+          if (x === 1) {
+            this.ctx.fillText(String(Math.floor(this.currentY + y)), 0, ((y - (this.currentY % 1)) * this.tileH) + 30);
           }
         }
       }
     }
     requestAnimationFrame(this.drawGame.bind(this));
-    // console.log(this.framesLastSecond);
-    // this.ctx.fillStyle = '#ff0000';
-    // this.ctx.fillText('FPS: ' + this.framesLastSecond, 10, 20);
   }
 
   dragMap(event: MouseEvent): void {
+    if (this.displayVillageDialogTip === true) {
+      setTimeout(() => this.displayVillageDialogTip = false, 500);
+    }
+
     if (this.activeDragging) {
       if (event.movementX > 0) {
         this.onNavigate('left', 1);
@@ -125,9 +131,19 @@ export class GameBrowserComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getMapCoordinatesByClick(event: MouseEvent): void {
+    const clickX = event.clientX;
+    const clickY = event.clientY;
+    this.lastClickObjectX = Math.round(this.currentX + Math.floor(clickX / this.tileW));
+    this.lastClickObjectY = Math.round(this.currentY + Math.floor(clickY / this.tileH));
+  }
+
   onClick(event: MouseEvent): void {
     this.activeDragging = true;
-
+    this.getMapCoordinatesByClick(event);
+    this.lastClickX = event.clientX;
+    this.lastClickY = event.clientY;
+    this.displayVillageDialogTip = true;
   }
 
   onNavigate(direction: string, stepMultiper: number): void {
